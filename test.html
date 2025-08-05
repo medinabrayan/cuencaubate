@@ -1,0 +1,21 @@
+<script>
+async function test() {
+  const testData = {
+    nombre_cientifico: "Test Plant",
+    nombre_comun: "Planta de prueba",
+    imagen: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==",
+    probabilidad: 0.95,
+    descripcion: "Esto es una prueba"
+  };
+
+  const response = await fetch('database/guardar_planta.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(testData)
+  });
+  
+  console.log(await response.text()); // Primero muestra como texto
+}
+
+test();
+</script>
