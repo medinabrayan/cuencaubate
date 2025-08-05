@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Admin | Cuenca Ubaté</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #38A169;
+            --primary-light: #48BB78;
+            --primary-dark: #2F855A;
+            --secondary: #ECC94B;
+            --light: #F0FFF4;
+            --dark: #1A202C;
+            --gray: #718096;
+            --light-gray: #EDF2F7;
+            --error: #E53E3E;
+            --white: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+            padding: 0 20px;
+        }
+
+        .login-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .login-logo i {
+            font-size: 32px;
+            margin-right: 12px;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.2);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-btn i {
+            margin-right: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+            align-items: center;
+        }
+
+        .error-message i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        .change-password-link {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: none;
+            margin-top: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .change-password-link i {
+            margin-right: 6px;
+            font-size: 12px;
+        }
+
+        .change-password-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .login-footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--gray);
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Modal styles */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--dark);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--dark);
+        }
+
+        .success-message {
+            color: var(--primary);
+            font-size: 13px;
+            margin: 15px 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-message i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        /* Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .modal-content {
+                margin: 0 15px;
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-logo">
+                <i class="fas fa-leaf"></i>
+                <span>Cuenca Ubaté</span>
+            </div>
+            
+            <h1 class="login-title">Acceso Administrativo</h1>
+            <p class="login-subtitle">Ingrese la contraseña para acceder al panel</p>
+            
+            <div class="login-form">
+                <div class="input-group">
+                    <label for="adminPassword">Contraseña</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="adminPassword" class="input-field" placeholder="Ingrese su contraseña" required>
+                    </div>
+                    <div id="errorMessage" class="error-message">
+                        <i class="fas fa-exclamation-circle"></i> <span>Contraseña incorrecta</span>
+                    </div>
+                    <a id="changePasswordLink" class="change-password-link">
+                        <i class="fas fa-key"></i> Cambiar contraseña
+                    </a>
+                </div>
+                
+                <button type="button" onclick="verifyAdmin()" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Ingresar
+                </button>
+            </div>
+            
+            <div class="login-footer">
+                <p>Sistema de administración de plantas | Cuenca Ubaté</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para cambiar contraseña -->
+    <div id="passwordModal" class="password-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title">Cambiar Contraseña</h2>
+            
+            <div class="login-form">
+                <div class="input-group">
+                    <label for="currentPassword">Contraseña actual</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="currentPassword" class="input-field" placeholder="Ingrese su contraseña actual" required>
+                    </div>
+                    <div id="currentPasswordError" class="error-message">
+                        <i class="fas fa-exclamation-circle"></i> <span>Contraseña actual incorrecta</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="newPassword">Nueva contraseña</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="newPassword" class="input-field" placeholder="Ingrese nueva contraseña" required>
+                    </div>
+                    <div id="newPasswordError" class="error-message">
+                        <i class="fas fa-exclamation-circle"></i> <span>La contraseña debe tener al menos 6 caracteres</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="confirmPassword">Confirmar nueva contraseña</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="confirmPassword" class="input-field" placeholder="Confirme nueva contraseña" required>
+                    </div>
+                    <div id="confirmPasswordError" class="error-message">
+                        <i class="fas fa-exclamation-circle"></i> <span>Las contraseñas no coinciden</span>
+                    </div>
+                </div>
+                
+                <div id="changePasswordSuccess" class="success-message">
+                    <i class="fas fa-check-circle"></i> <span>Contraseña cambiada exitosamente</span>
+                </div>
+                
+                <button type="button" onclick="changePassword()" class="login-btn">
+                    <i class="fas fa-save"></i> Guardar nueva contraseña
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de autenticación mejorado
+        const authSystem = {
+            STORAGE_KEY: 'adminAuthData',
+            data: {
+                password: "admin123",  // Contraseña por defecto
+                lastChanged: new Date().toISOString()
+            },
+            
+            init: function() {
+                this.loadAuthData();
+            },
+            
+            loadAuthData: function() {
+                const savedData = localStorage.getItem(this.STORAGE_KEY);
+                if (savedData) {
+                    this.data = JSON.parse(savedData);
+                }
+            },
+            
+            saveAuthData: function() {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
+            },
+            
+            verifyPassword: function(password) {
+                return password === this.data.password;
+            },
+            
+            changePassword: function(currentPassword, newPassword) {
+                if (this.data.password && !this.verifyPassword(currentPassword)) {
+                    return { success: false, message: "Contraseña actual incorrecta" };
+                }
+                
+                if (newPassword.length < 6) {
+                    return { success: false, message: "La contraseña debe tener al menos 6 caracteres" };
+                }
+                
+                this.data.password = newPassword;
+                this.data.lastChanged = new Date().toISOString();
+                this.saveAuthData();
+                
+                return { success: true, message: "Contraseña cambiada exitosamente" };
+            }
+        };
+
+        // Inicializar el sistema
+        document.addEventListener('DOMContentLoaded', function() {
+            authSystem.init();
+            
+            // Permitir login con Enter
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyAdmin();
+                }
+            });
+        });
+
+        // Función para verificar el login
+        function verifyAdmin() {
+            const passwordInput = document.getElementById('adminPassword');
+            const password = passwordInput.value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (authSystem.verifyPassword(password)) {
+                sessionStorage.setItem('adminAuth', 'true');
+                window.location.href = 'plantas_guardadas.html';
+            } else {
+                errorMessage.style.display = 'flex';
+                passwordInput.classList.add('shake');
+                setTimeout(() => {
+                    passwordInput.classList.remove('shake');
+                }, 500);
+            }
+        }
+
+        // Función para cambiar contraseña
+        function changePassword() {
+            const currentPass = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+            
+            const currentError = document.getElementById('currentPasswordError');
+            const newError = document.getElementById('newPasswordError');
+            const confirmError = document.getElementById('confirmPasswordError');
+            const successMessage = document.getElementById('changePasswordSuccess');
+            
+            // Resetear mensajes
+            currentError.style.display = 'none';
+            newError.style.display = 'none';
+            confirmError.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Validar que coincidan las nuevas contraseñas
+            if (newPass !== confirmPass) {
+                confirmError.style.display = 'flex';
+                return;
+            }
+            
+            // Intentar cambiar contraseña
+            const result = authSystem.changePassword(currentPass, newPass);
+            
+            if (result.success) {
+                successMessage.textContent = result.message;
+                successMessage.style.display = 'flex';
+                
+                // Resetear formulario después de 2 segundos
+                setTimeout(() => {
+                    closeModal();
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                    successMessage.style.display = 'none';
+                }, 2000);
+            } else {
+                if (result.message.includes("actual")) {
+                    currentError.textContent = result.message;
+                    currentError.style.display = 'flex';
+                } else {
+                    newError.textContent = result.message;
+                    newError.style.display = 'flex';
+                }
+            }
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+        }
+
+        // Abrir modal al hacer clic en "Cambiar contraseña"
+        document.getElementById('changePasswordLink').addEventListener('click', function() {
+            document.getElementById('passwordModal').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
