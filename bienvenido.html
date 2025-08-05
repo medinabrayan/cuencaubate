@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido | Cuenca Alta del Río Ubaté</title>
+    <style>
+        /* ESTILOS GENERALES */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+            text-align: center;
+        }
+
+        /* ANIMACIÓN DEL FONDO */
+        .carrusel {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            animation: cambiarFondo 15s infinite;
+            background-size: cover;
+            background-position: center;
+        }
+
+        @keyframes cambiarFondo {
+            0%, 33% { background-image: url('assets/img/imagen5.jpeg'); }
+            34%, 66% { background-image: url('assets/img/imagen4.jpeg'); }
+            67%, 100% { background-image: url('assets/img/imagen6.jpeg'); }
+        }
+
+        header {
+            padding: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        .admin-btn {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .admin-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .welcome-container {
+            position: relative;
+            margin-top: 15vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .enter-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            transition: background 0.3s;
+        }
+
+        .enter-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* ANIMACIÓN DE HOJAS */
+        .leaf-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0;
+            animation: falling linear infinite;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
+            will-change: transform;
+            image-rendering: optimizeQuality;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translate(0, -10%) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(var(--random-x), 100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Carrusel de fondos -->
+    <div class="carrusel"></div>
+
+    <header>
+        <a href="login.html" class="admin-btn">Ingresar como Administrador</a>
+    </header>
+
+    <main>
+        <div class="welcome-container">
+            <h1>Bienvenido a la Cuenca Alta del Río Ubaté</h1>
+            <p>Explora la riqueza natural y cultural de esta región.</p>
+            <a href="index.html" class="enter-btn">Ingresar</a>
+        </div>
+    </main>
+
+    <!-- Animación de hojas -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Crear contenedor
+            const leafContainer = document.createElement('div');
+            leafContainer.className = 'leaf-container';
+            document.body.appendChild(leafContainer);
+
+            // 2. Rutas de imágenes SVG
+            const leafTypes = [
+                'url("assets/img/hoja1.svg")',
+                'url("assets/img/hoja2.svg")',
+                'url("assets/img/hoja3.svg")'
+            ];
+
+            // 3. Crear 15 hojas
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const leaf = document.createElement('div');
+                    leaf.className = 'leaf';
+                    
+                    // Configuración aleatoria
+                    const size = Math.random() * 100 + 90; // 15-40px
+                    const duration = Math.random() * 15 + 10; // 10-25s
+                    const startX = Math.random() * 100;
+                    const rotation = Math.random() * 360;
+                    
+                    // Aplicar estilos
+                    leaf.style.cssText = `
+                        width: ${size}px;
+                        height: ${size}px;
+                        background-image: ${leafTypes[Math.floor(Math.random() * leafTypes.length)]};
+                        left: ${startX}%;
+                        top: -${size}px;
+                        --random-x: ${(Math.random() * 200 - 100)}px;
+                        animation-duration: ${duration}s;
+                        animation-delay: ${Math.random() * 5}s;
+                        transform: rotate(${rotation}deg);
+                    `;
+                    
+                    leafContainer.appendChild(leaf);
+                    
+                    // Reiniciar animación
+                    leaf.addEventListener('animationiteration', () => {
+                        leaf.style.left = `${Math.random() * 100}%`;
+                        leaf.style.top = `-${size}px`;
+                        leaf.style.opacity = '0';
+                        leaf.style.setProperty('--random-x', `${(Math.random() * 200 - 100)}px`);
+                        void leaf.offsetWidth; // Forzar reflow
+                        leaf.style.opacity = '0.8';
+                    });
+                }, i * 300);
+            }
+        });
+    </script>
+</body>
+</html>
