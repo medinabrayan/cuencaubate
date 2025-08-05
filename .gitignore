@@ -1,0 +1,15 @@
+backend/myenv
+backend/.env
+backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.env
+*.DS_Store
+*.egg-info/
+*.vscode/
+*.idea/
+*.coverage
